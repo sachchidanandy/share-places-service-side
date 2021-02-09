@@ -1,11 +1,11 @@
 const express = require('express');
 
-const HttpErrors = require('../modals/HttpError');
+const { getAllUsers, loginHandler, signupHanlder } = require('../controller/user-controller');
 
-const router = express.Router();
+const routes = express.Router();
 
-router.get('/', (req, res, next) => {
-    return next(new HttpErrors("Just for funn", 404));
-});
+routes.get('/', getAllUsers);
+routes.post('/signup', signupHanlder);
+routes.get('/login', loginHandler);
 
-module.exports = router;
+module.exports = routes;
