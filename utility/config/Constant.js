@@ -9,5 +9,6 @@ module.exports = {
     PAYMENT_REQ: 402,
     FORBIDDEN: 403,
     NOT_FOUND: 404,
+    UN_PROCESSED: 422,
     INTERNAL_SERVER_ERROR: 500,
 }

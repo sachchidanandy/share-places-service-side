@@ -6,6 +6,6 @@ const routes = express.Router();
 
 routes.get('/', getAllUsers);
 routes.post('/signup', signupHanlder);
-routes.get('/login', loginHandler);
+routes.post('/login', loginHandler);
 
 module.exports = routes;
