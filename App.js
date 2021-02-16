@@ -1,9 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const routeHandler = require('./utility/routes');
-const Constant = require('./utility/config/constant');
-const HttpError = require('./utility/modals/HttpError');
+const routeHandler = require('./api/routes');
+const Constant = require('./api/utility/constant');
+const HttpError = require('./api/modals/HttpError');
 
 const app = express();
 

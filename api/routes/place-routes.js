@@ -8,7 +8,7 @@ const {
     deletePlaceDetail,
     addNewPlaceDetail
 } = require('../controller/place-controller');
-const { validateForRequired, validateForMinCharacter } = require('../config/validation-rules');
+const { validateForRequired, validateForMinCharacter } = require('../utility/validation-rules');
 
 const router = express.Router();
 

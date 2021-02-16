@@ -2,9 +2,10 @@ const { v4: uuidv4 } = require('uuid');
 const { validationResult } = require('express-validator');
 
 const HttpError = require('../modals/HttpError');
-const Constant = require('../config/constant');
-const { BAD_REQUEST } = require('../config/constant');
-const { getValidationErrorMessages } = require('../config/validation-rules');
+const Constant = require('../utility/constant');
+const { BAD_REQUEST, UN_PROCESSED } = require('../utility/constant');
+const { getValidationErrorMessages } = require('../utility/validation-rules');
+const { getCordinatedForAddress } = require('../services/common');
 
 let DUMMY_DATA = [
     {
@@ -70,7 +71,7 @@ const deletePlaceDetail = (req, res, next) => {
     return res.json({message: 'Record deleted successfully'});
 };
 
-const addNewPlaceDetail = (req, res, next) => {
+const addNewPlaceDetail = async (req, res, next) => {
     const validationError = validationResult(req);
     if (! validationError.isEmpty()) {
         return next(new HttpError(getValidationErrorMessages(validationError), BAD_REQUEST));
@@ -80,24 +81,30 @@ const addNewPlaceDetail = (req, res, next) => {
         description,
         imageUrl,
         address,
-        location,
         creator
     } = req.body;
-    const placeDetail = {
-        id: uuidv4(),
-        title,
-        description,
-        imageUrl,
-        address,
-        location: {
-          lat: location['lat'],
-          lng: location['lng']
-        },
-        creator: 'u1'
-    };
 
-    DUMMY_DATA.push(placeDetail);
-    return res.status(Constant.CREATED).json({message: 'Record created successfully'});
+    try {
+        const {geometry, formatted} = await getCordinatedForAddress(address);
+        console.log(geometry);
+        if (!geometry) {
+            return next(new HttpError("Can't find cordinated for address", UN_PROCESSED));
+        }
+        const placeDetail = {
+            id: uuidv4(),
+            title,
+            description,
+            imageUrl,
+            address: formatted,
+            location: geometry,
+            creator: 'u1'
+        };
+
+        DUMMY_DATA.push(placeDetail);
+        return res.status(Constant.CREATED).json({message: 'Record created successfully'});
+    } catch (error) {
+        return next(new HttpError("Can't find cordinated for address", UN_PROCESSED));
+    }
 };
 
 exports.getPlacesByUserId = getPlacesByUserId;

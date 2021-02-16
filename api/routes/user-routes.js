@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { validateEmail, validatePassword, validateForRequired } = require('../config/validation-rules');
+const { validateEmail, validatePassword, validateForRequired } = require('../utility/validation-rules');
 const { getAllUsers, loginHandler, signupHanlder } = require('../controller/user-controller');
 
 const routes = express.Router();

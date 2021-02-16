@@ -2,8 +2,8 @@ const { v4: uuidv4 } = require('uuid');
 const { validationResult } = require('express-validator');
 
 const HttpError = require('../modals/HttpError');
-const { CREATED, UN_PROCESSED, BAD_REQUEST } = require('../config/constant');
-const { getValidationErrorMessages } = require('../config/validation-rules');
+const { CREATED, UN_PROCESSED, BAD_REQUEST } = require('../utility/constant');
+const { getValidationErrorMessages } = require('../utility/validation-rules');
 
 const DUMMY_USER = [
     {
