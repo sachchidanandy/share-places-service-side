@@ -1,6 +1,9 @@
-const HttpError = require('../modals/HttpError');
 const { v4: uuidv4 } = require('uuid');
-const { CREATED, UN_PROCESSED } = require('../config/Constant');
+const { validationResult } = require('express-validator');
+
+const HttpError = require('../modals/HttpError');
+const { CREATED, UN_PROCESSED, BAD_REQUEST } = require('../config/constant');
+const { getValidationErrorMessages } = require('../config/validation-rules');
 
 const DUMMY_USER = [
     {
@@ -16,6 +19,10 @@ const getAllUsers = (req, res, next) => {
 };
 
 const signupHanlder = (req, res, next) => {
+    const validationError = validationResult(req);
+    if (! validationError.isEmpty()) {
+        return next(new HttpError(getValidationErrorMessages(validationError), BAD_REQUEST));
+    }
     const { name, email, password } = req.body;
     const findUser = DUMMY_USER.find(data => data.email === email);
     if (findUser) {

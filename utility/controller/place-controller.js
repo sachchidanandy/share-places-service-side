@@ -1,7 +1,10 @@
 const { v4: uuidv4 } = require('uuid');
+const { validationResult } = require('express-validator');
 
 const HttpError = require('../modals/HttpError');
-const Constant = require('../config/Constant');
+const Constant = require('../config/constant');
+const { BAD_REQUEST } = require('../config/constant');
+const { getValidationErrorMessages } = require('../config/validation-rules');
 
 let DUMMY_DATA = [
     {
@@ -39,6 +42,10 @@ const getPlaceByPlaceId = (req, res, next) => {
 };
 
 const updatePlaceDetail = (req, res, next) => {
+    const validationError = validationResult(req);
+    if (! validationError.isEmpty()) {
+        return next(new HttpError(getValidationErrorMessages(validationError), BAD_REQUEST));
+    }
     const productId = req.params.pid;
     const { title, description } = req.body;
     if (!productId) {
@@ -64,6 +71,10 @@ const deletePlaceDetail = (req, res, next) => {
 };
 
 const addNewPlaceDetail = (req, res, next) => {
+    const validationError = validationResult(req);
+    if (! validationError.isEmpty()) {
+        return next(new HttpError(getValidationErrorMessages(validationError), BAD_REQUEST));
+    }
     const {
         title,
         description,

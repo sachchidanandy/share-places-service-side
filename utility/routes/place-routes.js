@@ -8,13 +8,14 @@ const {
     deletePlaceDetail,
     addNewPlaceDetail
 } = require('../controller/place-controller');
+const { validateForRequired, validateForMinCharacter } = require('../config/validation-rules');
 
 const router = express.Router();
 
 router.get('/user/:uid', getPlacesByUserId);
 router.get('/:pid', getPlaceByPlaceId)
-router.patch('/:pid', updatePlaceDetail);
+router.patch('/:pid', [validateForRequired('title'), validateForMinCharacter('description', 5)], updatePlaceDetail);
 router.delete('/:pid', deletePlaceDetail);
-router.post('/', addNewPlaceDetail);
+router.post('/', [validateForRequired('title'), validateForMinCharacter('description', 5), validateForRequired('address')], addNewPlaceDetail);
 
 module.exports = router;

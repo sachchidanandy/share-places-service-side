@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const routeHandler = require('./utility/routes');
-const Constant = require('./utility/config/Constant');
+const Constant = require('./utility/config/constant');
 const HttpError = require('./utility/modals/HttpError');
 
 const app = express();
